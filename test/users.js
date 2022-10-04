@@ -1,7 +1,7 @@
+require('dotenv').config();
 const expect = require('chai').expect;
-const { it } = require('mocha');
 const request = require('supertest');
-const token = 'a7becb822b803e05aed104c3b69ca51c700d483503dac9d737eb5a4b5c180484';
+const token = process.env.TOKEN;
 
 describe('Users', ()=>{
     /*it('GET /users', (done)=>{
@@ -56,7 +56,7 @@ describe('Users', ()=>{
         expect(res.body).to.deep.include(data);
     });
 
-    it.only('PUT/users/:id', async () => {
+    it('PUT/users/:id', async () => {
         const data = {
             "status": "inactive"
           }
@@ -66,8 +66,16 @@ describe('Users', ()=>{
             .set('Authorization', `Bearer ${token}`)
             .send(data)
         console.log(res.body);
-        expect(res.body.status).to.eq('inactive');;
+        expect(res.body.status).to.eq('inactive');
 
+    });
+
+    it('DELETE/users/:id', async () => {
+        const res = await request('https://gorest.co.in/public/v2/')
+        .delete('users/3162')
+        .set('Authorization', `Bearer ${token}`)
+        console.log(res.body[0]);
+        expect(res.body[0]).to.eq(undefined);
     });
     
 })
