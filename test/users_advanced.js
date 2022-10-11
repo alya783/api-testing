@@ -1,5 +1,6 @@
 require('dotenv').config();
 const expect = require('chai').expect;
+const conf = require("../config/conf");
 const request = require('supertest');
 const token = process.env.TOKEN;
 const dataUser = {
@@ -14,7 +15,7 @@ describe('Users', ()=>{
     let userID;
     describe('POST', () => {
         it('/users', async () => {
-            const res = await request('https://gorest.co.in/public/v2/')
+            const res = await request(conf.baseUrl)
                 .post('users')
                 .set('Authorization', `Bearer ${token}`)
                 .send(dataUser)
@@ -26,19 +27,19 @@ describe('Users', ()=>{
 
     describe('GET', () => {
         it('/users', async () => {
-            const res = await request('https://gorest.co.in/public/v2/')
+            const res = await request(conf.baseUrl)
                 .get(`users?access-token=${token}`);
             expect(res.body).to.not.be.empty;
         });
 
         it('/users/:id', async () => {
-            const res = await request('https://gorest.co.in/public/v2/')
+            const res = await request(conf.baseUrl)
                 .get(`users/${userID}?access-token=${token}`);
             expect(res.body.id).to.be.eq(userID);
         });
 
         it('/users/different parameters', async () => {
-            const res = await request('https://gorest.co.in/public/v2/')
+            const res = await request(conf.baseUrl)
                 .get(`users?access-token=${token}&page=4&status=active`);
             expect(res.body).to.not.be.empty;
             
@@ -51,7 +52,7 @@ describe('Users', ()=>{
 
     describe('PUT', () => {
         it('/users/:id', async () => {
-            const res = await request('https://gorest.co.in/public/v2/')
+            const res = await request(conf.baseUrl)
                 .put(`users/${userID}`)
                 .set('Authorization', `Bearer ${token}`)
                 .send(changedInfo)
@@ -62,7 +63,7 @@ describe('Users', ()=>{
     
     describe('DELETE', () => {
         it('DELETE/users/:id', async () => {
-            const res = await request('https://gorest.co.in/public/v2/')
+            const res = await request(conf.baseUrl)
             .delete(`users/${userID}`)
             .set('Authorization', `Bearer ${token}`)
             expect(res.body[0]).to.eq(undefined);
