@@ -1,9 +1,19 @@
 require('dotenv').config();
 const expect = require('chai').expect;
 const request = require('supertest');
+const { faker } = require('@faker-js/faker');
 const token = process.env.TOKEN;
+let name = faker.name.fullName({ sex: 'female' });
+let email = faker.internet.email();
+const dataUser = {
+                    "name": `${name}`,
+                    "email": `${email}`,
+                    "gender": "female",
+                    "status": "active"
+                };
 
 describe('Users', ()=>{
+    let userID;
     /*it('GET /users', (done)=>{
         request('https://gorest.co.in/public/v2/')
             .get(`users?access-token=${token}`)
@@ -39,21 +49,15 @@ describe('Users', ()=>{
         });
     });
 
-    it('POST /users', async () => {
-        const data = {
-            "name": "Alya Novikova",
-            "email": "test4@gmail.com",
-            "gender": "female",
-            "status": "active"
-          }
-
+    it('POST /users', async () => { 
         const res = await request('https://gorest.co.in/public/v2/')
             .post('users')
             .set('Authorization', `Bearer ${token}`)
-            .send(data)
+            .send(dataUser)
         console.log(res.body)
         //expect(res.body.email).to.eq(data.email);
-        expect(res.body).to.deep.include(data);
+        expect(res.body).to.deep.include(dataUser);
+        userID = res.body.id;
     });
 
     it('PUT/users/:id', async () => {
@@ -62,7 +66,7 @@ describe('Users', ()=>{
           }
 
         const res = await request('https://gorest.co.in/public/v2/')
-            .put('users/3215')
+            .put(`users/${userID}`)
             .set('Authorization', `Bearer ${token}`)
             .send(data)
         console.log(res.body);
@@ -72,12 +76,11 @@ describe('Users', ()=>{
 
     it('DELETE/users/:id', async () => {
         const res = await request('https://gorest.co.in/public/v2/')
-        .delete('users/3162')
+        .delete(`users/${userID}`)
         .set('Authorization', `Bearer ${token}`)
         console.log(res.body[0]);
         expect(res.body[0]).to.eq(undefined);
-    });
-    
+    });  
 })
 
 
