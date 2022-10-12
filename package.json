@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/alya783/api-testing#readme",
   "devDependencies": {
+    "@faker-js/faker": "^7.5.0",
     "chai": "^4.3.6",
     "mocha": "^10.0.0",
     "mochawesome": "^7.1.3",

@@ -1,11 +1,14 @@
 require('dotenv').config();
 const expect = require('chai').expect;
 const conf = require("../config/conf");
+const { faker } = require('@faker-js/faker');
 const request = require('supertest');
 const token = process.env.TOKEN;
+let name = faker.name.fullName({ sex: 'female' });
+let email = faker.internet.email();
 const dataUser = {
-                    "name": "Fler Rox",
-                    "email": "test6@gmail.com",
+                    "name": `${name}`,
+                    "email": `${email}`,
                     "gender": "female",
                     "status": "active"
                 };
@@ -19,7 +22,7 @@ describe('Users', ()=>{
                 .post('users')
                 .set('Authorization', `Bearer ${token}`)
                 .send(dataUser)
-
+            console.log(res.body);
             expect(res.body).to.deep.include(dataUser);
             userID = res.body.id;
         });

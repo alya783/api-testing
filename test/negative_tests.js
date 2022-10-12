@@ -1,11 +1,12 @@
 require('dotenv').config();
 const conf = require("../config/conf") 
 const expect = require('chai').expect;
-
+const { faker } = require('@faker-js/faker');
 const request = require('supertest');
 const token = process.env.TOKEN;
+let name = faker.name.fullName({ sex: 'male' });
 const dataUser = {
-    "name": "Piter Rox",
+    "name": `${name}`,
     "gender": "male",
     "status": "active"
 };
@@ -19,11 +20,6 @@ describe('Users', () => {
     });
 
     it('422 Data validation failed', async () => {
-        const dataUser = {
-            "name": "Piter Rox",
-            "gender": "male",
-            "status": "active"
-        };
         const res = await request(conf.baseUrl)
                     .post('users')
                     .set('Authorization', `Bearer ${token}`)
